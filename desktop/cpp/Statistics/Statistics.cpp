@@ -937,8 +937,8 @@ namespace Statistics
         r.summary = "ŷ = " + r.equation + "\nR² = " + fmt(r.r2);
         return r;
     }
-
-    RegressionResult logisticRegression(cot std::vector<Vec> &X, const Vec &y, int maxIter)
+    //TODO: David, verify fix is correct
+    RegressionResult logisticRegression(const std::vector<Vec> &X, const Vec &y, int maxIter)
     {
         RegressionResult r;
         int n = y.size(), p = X[0].size() + 1;
@@ -990,10 +990,11 @@ namespace Statistics
         // Build design matrix with intercept
         int n = y.size(), k = X[0].size();
         std::vector<Vec> Xd(n, Vec(k + 1));
-        for (int i = 0; i < n; ++i)
+        for (int i = 0; i < n; ++i){// //TODO: David, verify fix is correct
                   Xd[i][0] = 1;
-            for (int j = 0; j < k; ++j)
+            for (int j = 0; j < k; ++j){
                 Xd[i][j + 1] = X[i][j];
+            }
         }
         // Normal equations (reuse polynomial regression logic)
         Vec allX;
@@ -1064,8 +1065,8 @@ namespace Statistics
         r.r2 = 1 - sse / sst;
         r.adjR2 = 1 - (1 - r.r2) * (n - 1) / (n - m);
         r.rmse = std::sqrt(sse / (n - m));
-        std::ostringstream ss;
-        ss << "Multiple regression: R²=" << fmt(r.2) << ",  adj R²=" << fmt(r.adjR2);
+        std::ostringstream ss;  //TODO: David, verify fix is correct -- fmt(r.r2) 
+        ss << "Multiple regression: R²=" << fmt(r.r2) << ",  adj R²=" << fmt(r.adjR2);
         r.summary = ss.str();
         return r;
     }
@@ -1078,7 +1079,7 @@ namespace Statistics
     {
         if (std::abs(marginal) < 1e-15)
             return err("Marginal probability cannot be zero");
-        double posterior = prior * likelihood  marginal;
+        double posterior = (prior * likelihood)/  marginal; //TODO: David, verify fix is correct
         std::ostringstream ss;
         ss << "P(H|E) = P(E|H)·P(H) / P(E)\n"
            << "       = " << fmt(likelihood) << " × " << fmt(prior) << " / " << fmt(marginal)
@@ -1095,7 +1096,7 @@ namespace Statistics
         return ok(fmt(H), "bits");
     }
 
-    StatResult klDivergence(cst Vec &P, const Vec &Q)
+    StatResult klDivergence(const Vec &P, const Vec &Q)
     {
         if (P.size() != Q.size())
             return err("P and Q must have equal length");
@@ -1128,7 +1129,7 @@ namespace Statistics
         for (int i = 0; i < n; ++i)
         {
             if (i)
-                ss << ";
+                ss << ", ";//TODO: David, verify fix is correct
             ss << fmt(pi[i]);
         }
         ss << "]";

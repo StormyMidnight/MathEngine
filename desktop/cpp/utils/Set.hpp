@@ -29,7 +29,7 @@ public:
 		for (const auto& v : init) insert(v);
 	}
 
-	template <typename InputIt, typenae = std::enable_if_t<!std::is_integral<InputIt>::value>>
+	template <typename InputIt, typename = std::enable_if_t<!std::is_integral<InputIt>::value>>
 	Set(InputIt first, InputIt last) {
 		for (auto it = first; it != last; ++it) insert(*it);
 	}
@@ -42,14 +42,14 @@ public:
 		explicit iterator(typename OrderedMap<T, bool, Cmp>::iterator it) : it_(it) {}
 		const T& operator*() const { return it_.key(); }
 		iterator& operator++() { ++it_; return *this; }
-		iterator operator__(int) { auto t = *thisl ++*this; return t; }
+		iterator operator__(int) { auto t = *this; ++*this; return t; } //TODO: David, need to see if this is correct.
 		bool operator==(const iterator& o) const { return it_ == o.it_; }
 		bool operator!=(const iterator& o) const { return !(*this == o); }
 	private:
 		typename OrderedMap<T, bool, Cmp>::iterator it_;
 	};
 
-	iterator begin() const { return iterator(map_.begin(); }
+	iterator begin() const { return iterator(map_.begin()); }
 	iterator end()   const { return iterator(map_.end());  }
 
 

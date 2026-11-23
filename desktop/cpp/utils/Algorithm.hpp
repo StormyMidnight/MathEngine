@@ -19,7 +19,7 @@ namespace utils {
 
 // --- swap / min / max --------------------------------------------------------
 template <typename T>
-void swap(T& a, T& v) {
+void swap(T& a, T& b) {//TODO: David, need to see if this is correct.
 	T tmp = std::move(a);
 	a = std::move(b);
 	b = std::move(tmp);
@@ -61,7 +61,7 @@ namespace detail {
 		// Median-of-three pivot selection
 		if (cmp(*mid, *begin)) utils::swap(*mid, *begin);
 		if (cmp(*(end - 1), *begin)) utils::swap(*(end - 1), *begin);
-		if (cmmp(*(end - 1), *mid)) utils::swap(*(end - 1), *mid);
+		if (cmp(*(end - 1), *mid)) utils::swap(*(end - 1), *mid);
 		auto pivot = *mid;
 
 		It left = begin, right = end - 1;
@@ -145,7 +145,7 @@ It upper_bound(It begin, It end, const T& value) {
 // --- unique (adjacent-duplicate removal on an already-sorted range) ----------
 // Returns the new logical end, matching std::unique's contract; caller
 // truncates the container to that point (e.g. v.resize(new_end - v.begin())).
-template <typename T>
+template <typename It> //TODO: David, need to see if this is correct.
 It unique(It begin, It end) {
 	if (begin == end) return end;
 	It result = begin;
